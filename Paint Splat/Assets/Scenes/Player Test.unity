@@ -211,10 +211,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2050412679, guid: 7b69ba34e6b17ca4289908f992a345e8, type: 3}
-      propertyPath: viewIdField
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5504506454147366803, guid: 7b69ba34e6b17ca4289908f992a345e8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -277,24 +273,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b69ba34e6b17ca4289908f992a345e8, type: 3}
---- !u!1 &2050412678 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6162951816289452514, guid: 7b69ba34e6b17ca4289908f992a345e8,
-    type: 3}
-  m_PrefabInstance: {fileID: 1147956078}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2050412679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2050412678}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 0
-  m_SynchronizeScale: 0

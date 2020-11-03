@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2258576255176105959}
   - component: {fileID: 2050412679}
   - component: {fileID: 2050412680}
+  - component: {fileID: 625955389251661433}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -152,6 +153,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 2050412680}
+  - {fileID: 625955389251661433}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -170,3 +172,18 @@ MonoBehaviour:
   playerSpeed: 5
   paint: {fileID: 6691313710745197968, guid: c6f18fb76d19b944381fa54fb929c46c, type: 3}
   cooldownTime: 1
+--- !u!114 &625955389251661433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6162951816289452514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 0
