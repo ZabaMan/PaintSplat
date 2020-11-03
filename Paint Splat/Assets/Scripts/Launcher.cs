@@ -15,9 +15,7 @@ namespace Com.MyCompany.MyGame
         [SerializeField]
         private byte maxPlayersPerRoom = 4;
 
-
         #endregion
-
 
         #region Private Fields
 
@@ -26,6 +24,13 @@ namespace Com.MyCompany.MyGame
         /// This client's version number. Users are separated from each other by gameVersion (which allows you to make breaking changes).
         /// </summary>
         string gameVersion = "1";
+
+        [Tooltip("The Ui Panel to let the user enter name, connect and play")]
+        [SerializeField]
+        private GameObject controlPanel;
+        [Tooltip("The UI Label to inform the user that the connection is in progress")]
+        [SerializeField]
+        private GameObject progressLabel;
 
 
         #endregion
@@ -42,6 +47,8 @@ namespace Com.MyCompany.MyGame
 
         public override void OnDisconnected(DisconnectCause cause)
         {
+            progressLabel.SetActive(false);
+            controlPanel.SetActive(true);
             Debug.LogWarningFormat("PUN Basics Tutorial/Launcher: OnDisconnected() was called by PUN with reason {0}", cause);
         }
 
@@ -81,7 +88,8 @@ namespace Com.MyCompany.MyGame
         /// </summary>
         void Start()
         {
-            Connect();
+            progressLabel.SetActive(false);
+            controlPanel.SetActive(true);
         }
 
 
@@ -98,6 +106,8 @@ namespace Com.MyCompany.MyGame
         /// </summary>
         public void Connect()
         {
+            progressLabel.SetActive(true);
+            controlPanel.SetActive(false);
             // we check if we are connected or not, we join if we are , else we initiate the connection to the server.
             if (PhotonNetwork.IsConnected)
             {
