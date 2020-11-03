@@ -70,7 +70,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             IsFiring = true;
             Invoke("Cooldown", cooldownTime);
-            var splat = Instantiate(paint, transform.position, Quaternion.identity);
+            var splat = PhotonNetwork.Instantiate(this.paint.name, transform.position, Quaternion.identity, 0);
         }
 
     }
