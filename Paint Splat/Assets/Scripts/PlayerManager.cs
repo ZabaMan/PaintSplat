@@ -89,9 +89,17 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Paint"))
+        if(collision.CompareTag("Paint") && photonView.IsMine == true)
         {
-            print("Detected Paint");
+            print("Paint Enter");
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Paint") && photonView.IsMine == true)
+        {
+            print("Paint Exit");
         }
     }
 
