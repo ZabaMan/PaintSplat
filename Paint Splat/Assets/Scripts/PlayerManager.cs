@@ -30,7 +30,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     private GameObject paint;
     //True, when the user is firing
     private bool IsFiring;
-    private bool canFire = true;
+    private int detectedSplats = 0;
     [SerializeField]
     private float cooldownTime;
     #endregion
@@ -63,10 +63,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
 
         transform.Translate(transform.right * h * playerSpeed * Time.deltaTime);
         transform.Translate(transform.up * v * playerSpeed * Time.deltaTime);
-        
 
         // spawn paint
-        if (Input.GetButtonDown("Fire1") && paint != null && IsFiring != true && canFire)
+        if (Input.GetButtonDown("Fire1") && paint != null && IsFiring != true && detectedSplats == 0)
         {
             IsFiring = true;
             Invoke("Cooldown", cooldownTime);
@@ -91,7 +90,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         if(collision.CompareTag("Paint") && photonView.IsMine == true)
         {
-            canFire = false;
+            detectedSplats++;
         }
     }
 
@@ -99,7 +98,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (collision.CompareTag("Paint") && photonView.IsMine == true)
         {
-            canFire = true;
+            detectedSplats--;
+            if (detectedSplats < 0)
+                detectedSplats = 0;
         }
     }
 
