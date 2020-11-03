@@ -86,4 +86,13 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     }
 
     #endregion
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Paint"))
+        {
+            print("Detected Paint");
+        }
+    }
+
 }
