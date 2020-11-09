@@ -22,7 +22,7 @@ namespace Com.MyCompany.MyGame
 
         // Store the PlayerPref Key to avoid typos
         const string playerNamePrefKey = "PlayerName";
-
+        public static string Name;
 
         #endregion
 
@@ -40,10 +40,12 @@ namespace Com.MyCompany.MyGame
             InputField _inputField = this.GetComponent<InputField>();
             if (_inputField!=null)
             {
+                SetPlayerName(_inputField.text);
                 if (PlayerPrefs.HasKey(playerNamePrefKey))
                 {
                     defaultName = PlayerPrefs.GetString(playerNamePrefKey);
                     _inputField.text = defaultName;
+                    Name = defaultName;
                 }
             }
 

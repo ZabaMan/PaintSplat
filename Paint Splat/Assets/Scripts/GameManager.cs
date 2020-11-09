@@ -4,6 +4,7 @@ using System.Collections;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 using Photon.Pun;
@@ -16,6 +17,8 @@ namespace Com.MyCompany.MyGame
     {
         [Tooltip("The prefab to use for representing the player")]
         public GameObject playerPrefab;
+        public Text Score;
+        public Text userName;
 
         #region Photon Callbacks
 
@@ -74,7 +77,7 @@ namespace Com.MyCompany.MyGame
         {
             Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName); // not seen if you're the player connecting
 
-
+            userName.text = PlayerNameInputField.Name;
             if (PhotonNetwork.IsMasterClient)
             {
                 Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
@@ -104,7 +107,11 @@ namespace Com.MyCompany.MyGame
 
         #region Public Methods
 
-
+        public void Update()
+        {
+            Score.text = PlayerManager.number.ToString();
+            userName.text = PlayerNameInputField.Name;
+        }
         public void LeaveRoom()
         {
             PhotonNetwork.LeaveRoom();
