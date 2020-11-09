@@ -16,6 +16,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
 
     #endregion
 
+    public static int number = 0;
 
     #region Private Fields
 
@@ -30,11 +31,14 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     private GameObject paint;
     //True, when the user is firing
     private bool IsFiring;
-    private bool canFire = true;
+    private int detectedSplats = 0;
+    private SpriteRenderer spriteRenderer;
     [SerializeField]
     private float cooldownTime;
     #endregion
 
+    protected Joystick joystick;
+    protected Joybutton joybutton;
 
     // Start is called before the first frame update
     void Awake()
@@ -45,9 +49,27 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             PlayerManager.LocalPlayerInstance = this.gameObject;
         }
+
+        float c1 = 1f;
+        float c2 = 150 / 255f;
+        float c3 = Random.Range(150 / 255f, 1f);
+        
+        List<float> ListRandom = new List<float>() { c1, c2, c3 };
+        List<float> ListRGB = new List<float>();
+        for (int i = 0; i < 3; i++)
+        {
+            ListRGB.Add(ListRandom[Random.Range(0, ListRandom.Count)]);
+            ListRandom.Remove(ListRGB[i]);
+        }
+        spriteRenderer = this.gameObject.GetComponent<SpriteRenderer>();
+        spriteRenderer.color = new Color(ListRGB[0], ListRGB[1], ListRGB[2]);
+        paint.GetComponent<SpriteRenderer>().color = new Color(ListRGB[0], ListRGB[1], ListRGB[2]);
         // #Critical
         // we flag as don't destroy on load so that instance survives level synchronization, thus giving a seamless experience when levels load.
         DontDestroyOnLoad(this.gameObject);
+
+        joystick = FindObjectOfType<Joystick>();
+        joybutton = FindObjectOfType<Joybutton>();
     }
 
     // Update is called once per frame
@@ -58,19 +80,19 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
             return;
         }
 
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
+        float h = joystick.Horizontal;
+        float v = joystick.Vertical;
 
         transform.Translate(transform.right * h * playerSpeed * Time.deltaTime);
         transform.Translate(transform.up * v * playerSpeed * Time.deltaTime);
-        
 
         // spawn paint
-        if (Input.GetButtonDown("Fire1") && paint != null && IsFiring != true && canFire)
+        if (joybutton.Pressed && paint != null && IsFiring != true && detectedSplats == 0)
         {
             IsFiring = true;
             Invoke("Cooldown", cooldownTime);
             var splat = PhotonNetwork.Instantiate(this.paint.name, transform.position, Quaternion.identity, 0);
+            number += 1;
         }
 
     }
@@ -91,7 +113,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         if(collision.CompareTag("Paint") && photonView.IsMine == true)
         {
-            canFire = false;
+            detectedSplats++;
         }
     }
 
@@ -99,7 +121,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (collision.CompareTag("Paint") && photonView.IsMine == true)
         {
-            canFire = true;
+            detectedSplats--;
+            if (detectedSplats < 0)
+                detectedSplats = 0;
         }
     }
 
