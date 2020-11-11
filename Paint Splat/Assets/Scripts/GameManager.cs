@@ -20,9 +20,6 @@ namespace Com.MyCompany.MyGame
         public Text Score;
         public Text userName;
 
-        [Tooltip("The prefab to use for representing the board")]
-        public GameObject boardPrefab;
-
         #region Photon Callbacks
 
         private void Start()
@@ -44,18 +41,7 @@ namespace Com.MyCompany.MyGame
                     Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
                 }
             }
-            if (boardPrefab == null)
-            {
-                Debug.LogError("<Color=Red><a>Missing</a></Color> boardPrefab Reference. Please set it up in GameObject 'Game Manager'", this);
-            }
-            else
-            {
-                if (PhotonNetwork.IsMasterClient)
-                {
-                    Debug.LogFormat("We are Instantiating LocalBoard from {0}", SceneManagerHelper.ActiveSceneName);
-                    PhotonNetwork.InstantiateSceneObject("Board", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-                }
-            }
+            PhotonNetwork.AutomaticallySyncScene = true;
         }
 
         /// <summary>

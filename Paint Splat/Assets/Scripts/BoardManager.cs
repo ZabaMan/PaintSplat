@@ -13,9 +13,7 @@ public class BoardManager : MonoBehaviourPunCallbacks
 
     void Awake()
     {
-        // #Critical
-        // we flag as don't destroy on load so that instance survives level synchronization, thus giving a seamless experience when levels load.
-        DontDestroyOnLoad(this.gameObject);
+
     }
 
     // Update is called once per frame
