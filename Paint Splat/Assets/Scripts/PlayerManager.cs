@@ -40,18 +40,22 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public Transform board;
 
-    protected Joystick joystick;
-    protected Joybutton joybutton;
+    public Joystick joystick;
+    public Joybutton joybutton;
 
     // Start is called before the first frame update
     void Awake()
     {
         // #Important
         // used in GameManager.cs: we keep track of the localPlayer instance to prevent instantiation when levels are synchronized
-        if (photonView.IsMine)
+        if (photonView.IsMine == false)
         {
-            PlayerManager.LocalPlayerInstance = this.gameObject;
+            return;
         }
+
+
+        PlayerManager.LocalPlayerInstance = this.gameObject;
+        
 
         float c1 = 1f;
         float c2 = 150 / 255f;
@@ -71,8 +75,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         // we flag as don't destroy on load so that instance survives level synchronization, thus giving a seamless experience when levels load.
         DontDestroyOnLoad(this.gameObject);
 
-        joystick = FindObjectOfType<Joystick>();
-        joybutton = FindObjectOfType<Joybutton>();
+        joystick = FindObjectOfType<Joystick>();//.GetComponent<ConnectControl>().ConnectJoystick();
+        joybutton = FindObjectOfType<Joybutton>();//.GetComponent<ConnectControl>().ConnectJoybutton();
 
         if (board == null)
             board = GameObject.FindWithTag("Board").transform;
@@ -98,7 +102,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
             IsFiring = true;
             Invoke("Cooldown", cooldownTime);
             var splat = PhotonNetwork.Instantiate(this.paint.name, transform.position, Quaternion.identity, 0);
-            splat.transform.parent = board;
+            //splat.transform.parent = board;
             number += 1;
         }
 

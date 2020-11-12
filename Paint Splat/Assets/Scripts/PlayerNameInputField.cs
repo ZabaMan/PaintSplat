@@ -40,7 +40,7 @@ namespace Com.MyCompany.MyGame
             InputField _inputField = this.GetComponent<InputField>();
             if (_inputField!=null)
             {
-                SetPlayerName(_inputField.text);
+                ///SetPlayerName(_inputField.text);
                 if (PlayerPrefs.HasKey(playerNamePrefKey))
                 {
                     defaultName = PlayerPrefs.GetString(playerNamePrefKey);

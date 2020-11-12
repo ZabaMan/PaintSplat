@@ -173,6 +173,8 @@ MonoBehaviour:
   paint: {fileID: 6691313710745197968, guid: c6f18fb76d19b944381fa54fb929c46c, type: 3}
   cooldownTime: 1
   board: {fileID: 0}
+  joystick: {fileID: 0}
+  joybutton: {fileID: 0}
 --- !u!114 &625955389251661433
 MonoBehaviour:
   m_ObjectHideFlags: 0

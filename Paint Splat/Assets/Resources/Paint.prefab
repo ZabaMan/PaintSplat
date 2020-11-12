@@ -12,8 +12,7 @@ GameObject:
   - component: {fileID: 6840203848143571192}
   - component: {fileID: 7733181324259426665}
   - component: {fileID: -2406531614859312571}
-  - component: {fileID: -7012511607109405938}
-  - component: {fileID: 712500210552394715}
+  - component: {fileID: 8910034217720740853}
   m_Layer: 0
   m_Name: Paint
   m_TagString: Paint
@@ -73,9 +72,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: 0fe9e457464e58d489a680319c35d69b, type: 3}
-  m_Color: {r: 0.8812133, g: 0.5882353, b: 1, a: 1}
+  m_Color: {r: 0.5882353, g: 0.8111125, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -129,28 +128,11 @@ MonoBehaviour:
   observableSearch: 2
   Synchronization: 3
   OwnershipTransfer: 0
-  ObservedComponents:
-  - {fileID: -7012511607109405938}
-  - {fileID: 712500210552394715}
+  ObservedComponents: []
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &-7012511607109405938
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6691313710745197968}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 0
-  m_SynchronizeScale: 0
---- !u!114 &712500210552394715
+--- !u!114 &8910034217720740853
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -159,9 +141,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6691313710745197968}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48c2a4a0b5c559e708eeac33aac44bc5, type: 3}
+  m_Script: {fileID: 11500000, guid: 1a18c336815751044baa24fe5ad9bb57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 0
-  m_SynchronizeScale: 0
