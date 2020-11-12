@@ -31,11 +31,14 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     private GameObject paint;
     //True, when the user is firing
     private bool IsFiring;
+    private bool OverBoard;
     private int detectedSplats = 0;
     private SpriteRenderer spriteRenderer;
     [SerializeField]
     private float cooldownTime;
     #endregion
+
+    public Transform board;
 
     protected Joystick joystick;
     protected Joybutton joybutton;
@@ -70,6 +73,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
 
         joystick = FindObjectOfType<Joystick>();
         joybutton = FindObjectOfType<Joybutton>();
+
+        if (board == null)
+            board = GameObject.FindWithTag("Board").transform;
     }
 
     // Update is called once per frame
@@ -87,11 +93,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         transform.Translate(transform.up * v * playerSpeed * Time.deltaTime);
 
         // spawn paint
-        if (joybutton.Pressed && paint != null && IsFiring != true && detectedSplats == 0)
+        if (joybutton.Pressed && paint != null && IsFiring != true && detectedSplats == 0 && OverBoard)
         {
             IsFiring = true;
             Invoke("Cooldown", cooldownTime);
             var splat = PhotonNetwork.Instantiate(this.paint.name, transform.position, Quaternion.identity, 0);
+            splat.transform.parent = board;
             number += 1;
         }
 
@@ -114,6 +121,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         if(collision.CompareTag("Paint") && photonView.IsMine == true)
         {
             detectedSplats++;
+        } else if(collision.CompareTag("Board")) // Mighit need an IsMine
+        {
+            OverBoard = true;
         }
     }
 
@@ -124,6 +134,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
             detectedSplats--;
             if (detectedSplats < 0)
                 detectedSplats = 0;
+        } else if(collision.CompareTag("Board"))
+        {
+            OverBoard = false;
         }
     }
 

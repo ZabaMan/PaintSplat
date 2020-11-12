@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Paint
+  - Board
   layers:
   - Default
   - TransparentFX

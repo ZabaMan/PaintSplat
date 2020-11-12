@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8840283305134178586}
   m_Layer: 0
   m_Name: Board
-  m_TagString: Untagged
+  m_TagString: Board
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: eb58d2f0b9cf063a3bb9ca806b767922, type: 3}
   m_Color: {r: 0.32065138, g: 0.46226418, b: 0.2791029, a: 1}
   m_FlipX: 0
@@ -109,7 +109,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.0001, y: 0.0001}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &2278862997228527878
 MonoBehaviour:
@@ -141,7 +141,8 @@ MonoBehaviour:
   observableSearch: 2
   Synchronization: 3
   OwnershipTransfer: 0
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 8840283305134178586}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
