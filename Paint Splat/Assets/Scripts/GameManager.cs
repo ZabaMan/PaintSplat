@@ -9,16 +9,65 @@ using UnityEngine.UI;
 
 using Photon.Pun;
 using Photon.Realtime;
-
+using UnityEngine.PlayerLoop;
+using Photon.Pun.UtilityScripts;
 
 namespace Com.MyCompany.MyGame
 {
-    public class GameManager : MonoBehaviourPunCallbacks
+    public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         [Tooltip("The prefab to use for representing the player")]
         public GameObject playerPrefab;
-        public Text Score;
-        public Text userName;
+        public Text timeText;
+        [SerializeField]
+        private float time = 100;
+        private bool GameDone = false;
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (stream.IsWriting && PhotonNetwork.IsMasterClient)
+            {
+                stream.SendNext(time);
+            }
+            else
+            {
+                time = (float)stream.ReceiveNext();
+            }
+        }
+
+        public void Update()
+        {
+            if (GameDone)
+                return;
+
+            if (time == 0)
+            {
+                var winner = "";
+                var highscore = -1;
+                for (int i = 1; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+                {
+                    var score = PhotonNetwork.CurrentRoom.Players[i].GetScore();
+                    if(score > highscore)
+                    {
+                        winner = PhotonNetwork.CurrentRoom.Players[i].NickName;
+                    }
+                }
+
+                timeText.text = winner + " Won!";
+            }
+            else
+                timeText.text = ((int)time).ToString();
+
+
+            if (!PhotonNetwork.IsMasterClient)
+                return;
+
+            if (time > 0)
+                time -= Time.deltaTime;
+            else
+                time = 0;
+            
+        }
 
         #region Photon Callbacks
 
@@ -77,8 +126,7 @@ namespace Com.MyCompany.MyGame
         public override void OnPlayerEnteredRoom(Player other)
         {
             Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName); // not seen if you're the player connecting
-
-            userName.text = PlayerNameInputField.Name;
+            print(other.ActorNumber);
             if (PhotonNetwork.IsMasterClient)
             {
                 Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
@@ -108,11 +156,7 @@ namespace Com.MyCompany.MyGame
 
         #region Public Methods
 
-        public void Update()
-        {
-            Score.text = PlayerManager.number.ToString();
-            userName.text = PlayerNameInputField.Name;
-        }
+        
         public void LeaveRoom()
         {
             PhotonNetwork.LeaveRoom();

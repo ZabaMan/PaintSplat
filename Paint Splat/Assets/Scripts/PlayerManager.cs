@@ -2,21 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-
+using TMPro;
+using Photon.Pun.UtilityScripts;
 
 public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
 {
     #region IPunObservable implementation
 
-
+    [SerializeField]
+    public int score = 0;
+    
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(score);
+        }
+        else
+        {
+            score = (int)stream.ReceiveNext();
+        }
     }
 
 
     #endregion
 
-    public static int number = 0;
+    
 
     #region Private Fields
 
@@ -43,9 +54,20 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     public Joystick joystick;
     public Joybutton joybutton;
 
+    public TextMeshPro Score;
+    public TextMeshPro HitText;
+
+    private Color playerColor;
+    public Color[] colorList;
+
     // Start is called before the first frame update
     void Awake()
     {
+        
+        playerColor = colorList[photonView.CreatorActorNr];
+        spriteRenderer = this.gameObject.GetComponent<SpriteRenderer>();
+        spriteRenderer.color = playerColor;
+        //paint.GetComponent<SpriteRenderer>().color = playerColor;
         // #Important
         // used in GameManager.cs: we keep track of the localPlayer instance to prevent instantiation when levels are synchronized
         if (photonView.IsMine == false)
@@ -53,10 +75,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
             return;
         }
 
+        //PhotonView photonView = GetComponent<PhotonView>();
+        //photonView.RPC("SetScore", RpcTarget.All, PhotonNetwork.NickName);
 
         PlayerManager.LocalPlayerInstance = this.gameObject;
         
-
+        /*
         float c1 = 1f;
         float c2 = 150 / 255f;
         float c3 = Random.Range(150 / 255f, 1f);
@@ -67,16 +91,18 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             ListRGB.Add(ListRandom[Random.Range(0, ListRandom.Count)]);
             ListRandom.Remove(ListRGB[i]);
-        }
-        spriteRenderer = this.gameObject.GetComponent<SpriteRenderer>();
-        spriteRenderer.color = new Color(ListRGB[0], ListRGB[1], ListRGB[2]);
-        paint.GetComponent<SpriteRenderer>().color = new Color(ListRGB[0], ListRGB[1], ListRGB[2]);
+        }*/
+        
+        
         // #Critical
         // we flag as don't destroy on load so that instance survives level synchronization, thus giving a seamless experience when levels load.
         DontDestroyOnLoad(this.gameObject);
 
         joystick = FindObjectOfType<Joystick>();//.GetComponent<ConnectControl>().ConnectJoystick();
         joybutton = FindObjectOfType<Joybutton>();//.GetComponent<ConnectControl>().ConnectJoybutton();
+
+        //userName.text = PhotonNetwork.NickName;
+        
 
         if (board == null)
             board = GameObject.FindWithTag("Board").transform;
@@ -85,6 +111,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     // Update is called once per frame
     void Update()
     {
+        SetScore(score.ToString());
+
         if (photonView.IsMine == false)
         {
             return;
@@ -101,9 +129,23 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             IsFiring = true;
             Invoke("Cooldown", cooldownTime);
-            var splat = PhotonNetwork.Instantiate(this.paint.name, transform.position, Quaternion.identity, 0);
+            HitText.text = "HIT!";
+            Invoke("EmptyHitText", cooldownTime/2);
+            object[] data = new object[5];
+            data[0] = playerColor.r;
+            data[1] = playerColor.g;
+            data[2] = playerColor.b;
+            data[3] = transform.position;
+            data[4] = board.position;
+            var splat = PhotonNetwork.Instantiate(this.paint.name, transform.position, Quaternion.identity, 0, data);
             //splat.transform.parent = board;
-            number += 1;
+            score += 1;
+            PhotonNetwork.LocalPlayer.AddScore(1);
+        }
+        else if (joybutton.Pressed && paint != null && IsFiring != true && (detectedSplats > 0 || !OverBoard))
+        {
+            HitText.text = "Miss...";
+            Invoke("EmptyHitText", cooldownTime / 2);
         }
 
     }
@@ -116,6 +158,14 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     void Cooldown ()
     {
         IsFiring = false;
+    }
+
+    /// <summary>
+    /// Turn the text back to empty
+    /// </summary>
+    void EmptyHitText()
+    {
+        HitText.text = "";
     }
 
     #endregion
@@ -142,6 +192,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             OverBoard = false;
         }
+    }
+
+    void SetScore(string number)
+    {
+        Score.text = number;
     }
 
 }

@@ -19,6 +19,9 @@ public class BoardManager : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
         transform.position = Vector2.MoveTowards(transform.position, moveTarget, moveSpeed);
         currentTime += Time.deltaTime;
         if(currentTime >= directionalIntervals)
