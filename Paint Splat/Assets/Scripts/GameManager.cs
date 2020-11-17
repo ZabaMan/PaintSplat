@@ -9,7 +9,6 @@ using UnityEngine.UI;
 
 using Photon.Pun;
 using Photon.Realtime;
-using UnityEngine.PlayerLoop;
 using Photon.Pun.UtilityScripts;
 
 namespace Com.MyCompany.MyGame
@@ -44,16 +43,24 @@ namespace Com.MyCompany.MyGame
             {
                 var winner = "";
                 var highscore = -1;
-                for (int i = 1; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+                for (int i = 1; i < PhotonNetwork.CurrentRoom.PlayerCount+1; i++)
                 {
                     var score = PhotonNetwork.CurrentRoom.Players[i].GetScore();
-                    if(score > highscore)
+                    print(PhotonNetwork.CurrentRoom.Players[i].NickName + " has score: " + PhotonNetwork.CurrentRoom.Players[i].GetScore());
+                    if (score > highscore)
                     {
+                        highscore = score;
+                        print(PhotonNetwork.CurrentRoom.Players[i].NickName + " score was greater than highscore " + highscore);
                         winner = PhotonNetwork.CurrentRoom.Players[i].NickName;
                     }
                 }
 
                 timeText.text = winner + " Won!";
+                GameDone = true;
+                if (PhotonNetwork.IsMasterClient)
+                    PhotonNetwork.CurrentRoom.IsOpen = false;
+
+                Invoke("LeaveRoom", 5);
             }
             else
                 timeText.text = ((int)time).ToString();
